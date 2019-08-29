@@ -349,12 +349,12 @@ void diff_evo_xoverA(CIndividual &ind0, CIndividual &ind1, CIndividual &ind2, CI
 }
 
 //diff_evo_xoverB
-void diff_evo_xoverB(CIndividual &target, CIndividual &ind0, CIndividual &ind1, CIndividual &ind2, CIndividual &child, double rate)
+void diff_evo_xoverB(CIndividual &ind0, CIndividual &ind1, CIndividual &ind2, CIndividual &child, double rate)
 {
 	int idx_rnd = int(rnd_uni(&rnd_uni_init)*nvar);
 
 
-        double CR   =  (rnd_uni(&rnd_uni_init)<0.5)?0.2:1.0;
+    double CR   =  (rnd_uni(&rnd_uni_init)<0.5)?0.2:1.0;
 	for(int n=0;n<nvar;n++)
 	{
 	  /*Selected Two Parents*/
@@ -368,52 +368,26 @@ void diff_evo_xoverB(CIndividual &target, CIndividual &ind0, CIndividual &ind1, 
 	  double rnd1 = rnd_uni(&rnd_uni_init);
 	  //double CR   = 1.0;
 	  if(rnd1<CR||n==idx_rnd)
-		  child.x_var[n] = target.x_var[n] + (rate)*(ind2.x_var[n] - ind1.x_var[n]);
+		  child.x_var[n] = ind0.x_var[n] + (rate)*(ind2.x_var[n] - ind1.x_var[n]);
 	  else
-		  child.x_var[n] = target.x_var[n];
+		  child.x_var[n] = ind0.x_var[n];
 	  //*/
 
 	  // handle the boundary voilation
-	//  if(child.x_var[n]<vlowBound[n]){
-	//          double rnd = rnd_uni(&rnd_uni_init);
-//	//          double rnd =-0.1+1.2*rnd_uni(&rnd_uni_init);
- 	//       //child.x_var[n] = vlowBound[n] + rnd*(vuppBound[n] - vlowBound[n]);
- 	//        child.x_var[n] = vlowBound[n] + rnd*(ind0.x_var[n] - vlowBound[n]);
-	//  }
-	//  if(child.x_var[n]>vuppBound[n]){ 
-	//          double rnd = rnd_uni(&rnd_uni_init);
-	//          //double rnd =-0.1+1.2*rnd_uni(&rnd_uni_init);
- 	//        //child.x_var[n] = vlowBound[n] + rnd*(vuppBound[n] - vlowBound[n]);
-	//        child.x_var[n] = vuppBound[n] - rnd*(vuppBound[n] - ind0.x_var[n]);
-	//  }
+	  if(child.x_var[n]<vlowBound[n]){
+	          double rnd = rnd_uni(&rnd_uni_init);
+//	          double rnd =-0.1+1.2*rnd_uni(&rnd_uni_init);
+ 	       //child.x_var[n] = vlowBound[n] + rnd*(vuppBound[n] - vlowBound[n]);
+ 	        child.x_var[n] = vlowBound[n] + rnd*(ind0.x_var[n] - vlowBound[n]);
+	  }
+	  if(child.x_var[n]>vuppBound[n]){ 
+	          double rnd = rnd_uni(&rnd_uni_init);
+	          //double rnd =-0.1+1.2*rnd_uni(&rnd_uni_init);
+ 	        //child.x_var[n] = vlowBound[n] + rnd*(vuppBound[n] - vlowBound[n]);
+	        child.x_var[n] = vuppBound[n] - rnd*(vuppBound[n] - ind0.x_var[n]);
+	  }
 	  if(child.x_var[n]<vlowBound[n]) child.x_var[n] = vlowBound[n];
 	  if(child.x_var[n]>vuppBound[n]) child.x_var[n] = vuppBound[n];
-	}
-}
-
-void diff_evo_xoverBBlock(CIndividual &target, CIndividual &ind0, CIndividual &ind1, CIndividual &ind2, CIndividual &child, double rate)
-{
-	int l_index = int(rnd_uni(&rnd_uni_init)*nvar);
-        
-        double CR   =  (rnd_uni(&rnd_uni_init)<0.5)?0.2:1.0;
-
-	int l_index_add = 0;
-
-	while( (rnd_uni(&rnd_uni_init) < CR ) && (l_index_add < nvar-1)  )
-		l_index_add++;
-	for(int n=0;n<nvar;n++)
-	{
-	   child.x_var[n] = target.x_var[n];
-	   if(child.x_var[n]<vlowBound[n]) child.x_var[n] = vlowBound[n];
-	   if(child.x_var[n]>vuppBound[n]) child.x_var[n] = vuppBound[n];
-
-	}
-	for(int n=0;n< l_index_add;n++)
-	{
-	   int k = (l_index + n)%nvar;
-	   child.x_var[k] = target.x_var[k] + (rate)*(ind2.x_var[k] - ind1.x_var[k]);
-	   if(child.x_var[k]<vlowBound[k]) child.x_var[k] = vlowBound[k];
-	   if(child.x_var[k]>vuppBound[k]) child.x_var[k] = vuppBound[k];
 	}
 }
 void diff_evo_xoverC(CIndividual &ind0, CIndividual &ind1, CIndividual &ind2, vector<double> &xdiff,  CIndividual &child,  double rate)

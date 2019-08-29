@@ -117,110 +117,58 @@ namespace CEC09
 
 	void UF5(double *x, double *f, const unsigned int nx)
 	{
-	//	unsigned int j, count1, count2;
-	//	double sum1, sum2, yj, hj, N, E;
-	//	
-	//	sum1   = sum2   = 0.0;
-	//	count1 = count2 = 0;
-	//	N = 10.0; E = 0.1;
-	//	for(j = 2; j <= nx; j++) 
-	//	{
-	//		yj = x[j-1] - sin(6.0*PI*x[0]);
-	//		hj = 2.0*yj*yj - cos(4.0*PI*yj) + 1.0;
-	//		if (j % 2 == 0) 
-	//		{
-	//			sum2  += hj;
-	//			count2++;
-	//		} 
-	//		else 
-	//		{
-	//			sum1  += hj;
-	//			count1++;
-	//		}
-	//	}
-	//	hj = 0.5*(0.5/N + E)*fabs(sin(2.0*N*PI*x[0]));
-	//	f[0] = x[0]	      + hj + 2.0*sum1 / (double)count1;
-	//	f[1] = 1.0 - x[0] + hj + 2.0*sum2 / (double)count2;
-		 unsigned int j, count1, count2;
-                double sum1, sum2, yj, hj, N, E;
-                sum1   = sum2   = 0.0;
-                count1 = count2 = 0;
-                N = 10.0; E = 0.1;
-                for(j = 2; j <= nx; j++)
-                {
-                        yj = x[j-1]-sin(6.0*M_PI*x[0]+j*M_PI/nx);
-                        hj = 2.0*yj*yj - cos(4.0*M_PI*yj) + 1.0;
-                        if (j % 2 == 0)
-                        {
-                                sum2  += hj;
-                                count2++;
-                        }
-                        else
-                        {
-                                sum1  += hj;
-                                count1++;
-                        }
-                }
-                hj = (0.5/N + E)*fabs(sin(2.0*N*M_PI*x[0]));
-                f[0] = x[0]           + hj + 2.0*sum1 / (double)count1;
-                f[1] = 1.0 - x[0] + hj + 2.0*sum2 / (double)count2;
-
+		unsigned int j, count1, count2;
+		double sum1, sum2, yj, hj, N, E;
+		
+		sum1   = sum2   = 0.0;
+		count1 = count2 = 0;
+		N = 10.0; E = 0.1;
+		for(j = 2; j <= nx; j++) 
+		{
+			yj = x[j-1] - sin(6.0*PI*x[0]);
+			hj = 2.0*yj*yj - cos(4.0*PI*yj) + 1.0;
+			if (j % 2 == 0) 
+			{
+				sum2  += hj;
+				count2++;
+			} 
+			else 
+			{
+				sum1  += hj;
+				count1++;
+			}
+		}
+		hj = 0.5*(0.5/N + E)*fabs(sin(2.0*N*PI*x[0]));
+		f[0] = x[0]	      + hj + 2.0*sum1 / (double)count1;
+		f[1] = 1.0 - x[0] + hj + 2.0*sum2 / (double)count2;
 	}
 
 	void UF6(double *x, double *f, const unsigned int nx)
 	{
-	//	unsigned int j, count1, count2;
-	//	double sum1, sum2, yj, hj, N, E;
-	//	
-	//	sum1   = sum2   = 0.0;
-	//	count1 = count2 = 0;
-	//	N = 2.0; E = 0.1;
-	//	for(j = 2; j <= nx; j++) 
-	//	{
-	//		yj = x[j-1] - sin(6.0*PI*x[0]+j*PI/nx);
-	//		if (j % 2 == 0) 
-	//		{
-	//			sum2  += yj*yj;
-	//			count2++;
-	//		} 
-	//		else 
-	//		{
-	//			sum1  += yj*yj;
-	//			count1++;
-	//		}
-	//	}
-	//	hj = 0.5*(0.5/N + E)*sin(2.0*N*PI*x[0]);
-	//	if(hj<0.0) hj = 0.0;
-	//	f[0] = x[0]	      + hj + 2.0*sum1 / (double)count1;
-	//	f[1] = 1.0 - x[0] + hj + 2.0*sum2 / (double)count2;
-  		unsigned int j, count1, count2;
-                double sum1, sum2, prod1, prod2, yj, hj, pj, N, E;
-                N = 2.0; E = 0.1;
-                sum1   = sum2   = 0.0;
-                count1 = count2 = 0;
-                prod1  = prod2  = 1.0;
-                for(j = 2; j <= nx; j++)
-                {
-                        yj = x[j-1]-sin(6.0*PI*x[0]+j*PI/nx);
-                        pj = cos(20.0*yj*PI/sqrt(j+0.0));
-                        if (j % 2 == 0)
-                        {
-                                sum2  += yj*yj;
-                                prod2 *= pj;
-                                count2++;
-                        }
-                        else
-                        {
-                                sum1  += yj*yj;
-                                prod1 *= pj;
-                                count1++;
-                        }
-                }
-                hj = 2.0*(0.5/N + E)*sin(2.0*N*PI*x[0]);
-                if(hj<0.0) hj = 0.0;
-                f[0] = x[0]           + hj + 2.0*(4.0*sum1 - 2.0*prod1 + 2.0) / (double)count1;
-                f[1] = 1.0 - x[0] + hj + 2.0*(4.0*sum2 - 2.0*prod2 + 2.0) / (double)count2;
-
+		unsigned int j, count1, count2;
+		double sum1, sum2, yj, hj, N, E;
+		
+		sum1   = sum2   = 0.0;
+		count1 = count2 = 0;
+		N = 2.0; E = 0.1;
+		for(j = 2; j <= nx; j++) 
+		{
+			yj = x[j-1] - sin(6.0*PI*x[0]+j*PI/nx);
+			if (j % 2 == 0) 
+			{
+				sum2  += yj*yj;
+				count2++;
+			} 
+			else 
+			{
+				sum1  += yj*yj;
+				count1++;
+			}
+		}
+		hj = 0.5*(0.5/N + E)*sin(2.0*N*PI*x[0]);
+		if(hj<0.0) hj = 0.0;
+		f[0] = x[0]	      + hj + 2.0*sum1 / (double)count1;
+		f[1] = 1.0 - x[0] + hj + 2.0*sum2 / (double)count2;
 	}
 
 	void UF7(double *x, double *f, const unsigned int nx)

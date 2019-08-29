@@ -22,6 +22,7 @@
 // ===========================================================================*/
 
 
+
 #include "algorithm.h"
 #include <omp.h>
 
@@ -89,14 +90,29 @@ int main(int argc, char *argv[])
 		//readf>>strTestInstance;
 		//readf>>nvar;
 		//readf>>nobj;
-		strcpy(strTestInstance, argv[1]);
-		nvar = atoi(argv[2]);
-		nobj = atoi(argv[3]);
-		int run= atoi(argv[4]);
-		Di = sqrt(nvar)*atof(argv[5]);
-		strcpy(PATH, argv[6]);
+		int index = 1;
+		int run = 1;
+		strcpy(strpath, argv[index++]);
+		strcpy(strTestInstance, argv[index++]);
+		run= atoi(argv[index++]);
+		nobj = atoi(argv[index++]);
+		pops = atoi(argv[index++]);
+		max_nfes= atoi(argv[index++]);
+		niche =  atoi(argv[index++]);
+		prob = atof(argv[index++]);
+		if(argc <= index+2)//Two nvar and Di
+		{
+		   nvar = atoi(argv[index++]);
+		 
+		}
+		else  //WFG instances..
+		{
+		   param_l = atoi(argv[index++]);
+		   param_k = atoi(argv[index++]);
+		   nvar = param_l + param_k;
+		}
+		Di = sqrt(nvar)*atof(argv[index++]);
 		InitializeBounds(nvar, strTestInstance);
-//		Di = sqrt(nvar)*0.25;
 
 		//printf("\n -- Instance: %s, %d variables %d objectives di: %f\n\n", strTestInstance, nvar, nobj, Di);
 
@@ -107,7 +123,7 @@ int main(int argc, char *argv[])
 
 		std::fstream fout;
 		char logFilename[1024];
-		sprintf(logFilename, "%s/LOG/LOG_MOEAD_%s.dat",PATH, strTestInstance);
+		sprintf(logFilename, "LOG/LOG_MOEAD_%s.dat", strTestInstance);
 		fout.open(logFilename,std::ios::out);
 		fout<<"Inst: "<<strTestInstance<<endl;
 	    fout<<"Time: \n\n";
@@ -116,8 +132,8 @@ int main(int argc, char *argv[])
 		{
 			//printf("\n -- %d-th run  -- \n", run);
 			CMOEAD MOEAD;
-			MOEAD.load_parameter();
-			pop = MOEAD.pops;
+		//	MOEAD.load_parameter();
+		//	pop = MOEAD.pops;
 			MOEAD.exec_emo(run);
 			temp = clock();
 			duration = (double)(temp - start) / CLOCKS_PER_SEC;

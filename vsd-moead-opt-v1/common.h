@@ -93,10 +93,9 @@ double fitnessfunction(vector <double> &y_obj, vector <double> &namda)
    
   for(int i = 0; i < nobj; i++)
   {
-    //double diff = fabs(y_obj[i]-idealpoint[i])/(nadirpoint[i]-idealpoint[i]);
-    double diff = fabs(y_obj[i]);///(nadirpoint[i]);
+    double diff = fabs(y_obj[i]-idealpoint[i] );
     //double w = max(0.0001, namda[i]);
-    double w = (namda[i]) ? namda[i]: 1e-3;
+    double w = (namda[i]) ? namda[i]: 1e-10;
     double t = diff/w;
 		s += diff;
 	if(t > fmax) fmax = t;

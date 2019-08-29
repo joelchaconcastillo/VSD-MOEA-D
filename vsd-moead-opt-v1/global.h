@@ -22,12 +22,13 @@ using namespace std;
 //------------- Parameters in test instance ------------------
 
 int     nvar,  nobj;                    //  the number of variables and objectives
+int param_k, param_l;
 
 double  lowBound = 0,   uppBound = 1;   //  lower and upper bounds of variables
 double  vlowBound[100] ,   vuppBound[100];   //  lower and upper bounds of variables
 
 char    strTestInstance[256];
-char PATH[500];
+char    strpath[800];
 
 
 //------------- Parameters in random number ------------------
@@ -37,7 +38,7 @@ long    rnd_uni_init;
 
 //------------- Parameters in MOEA/D -------------------------
 
-vector <double> idealpoint, nadirpoint;
+vector <double> idealpoint;
 double          scale[100];  
 
 
@@ -45,7 +46,7 @@ int		etax    = 20, 	etam    = 50;   // distribution indexes of crossover and mut
 
 double  realx,  realm,  realb = 0.9;    // crossover, mutation, selection probabilities
 
-double Di; // distance available of the hypersphere...
-
+double Di, prob; // distance available of the hypersphere...
+int pops, max_nfes, niche;
 
 #endif

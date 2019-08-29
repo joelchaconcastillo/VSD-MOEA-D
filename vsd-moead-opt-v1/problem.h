@@ -3,17 +3,19 @@
 
 #include "cec09.h"
 #include "RealLife-MOPs.h"
-#include "wfg/WFG1/WFG1.h"
-#include "wfg/WFG2/WFG2.h"
-#include "wfg/WFG3/WFG3.h"
-#include "wfg/WFG4/WFG4.h"
-#include "wfg/WFG5/WFG5.h"
-#include "wfg/WFG6/WFG6.h"
-#include "wfg/WFG7/WFG7.h"
-#include "wfg/WFG8/WFG8.h"
-#include "wfg/WFG9/WFG9.h"
+
+//// Toolkit includes. //////////////////////////////////////////////////////
+
+#include "Toolkit/ExampleProblems.h"
+#include "Toolkit/TransFunctions.h"
+using namespace WFG::Toolkit;
+using namespace WFG::Toolkit::Examples;
+
+
+
 
 // *********************** CEC 2009 ************************************
+
 
 void CEC09_F1(std::vector< double >& F, std::vector< double >& X)
 {
@@ -120,66 +122,59 @@ void CEC09_WFG1_M5(std::vector< double >& F, std::vector< double >& X)
 ///////////////////////////////////////wfg problems...
 void wfg1(std::vector<double> &F, std::vector<double> &X)
 {
-	WFG1 Objwfg1;
-	Objwfg1.init(F.size() );
-	//this->Dimension = Objwfg1.getDimension();
-	Objwfg1.evaluate(X, F);
+	 //---- Get the function name.
+
+	int M = F.size();
+	int k=param_k, l=param_l;
+        F = Problems::WFG1( X, k, M );
 }
 void wfg2(std::vector<double> &F, std::vector<double> &X)
 {
-	WFG2 Objwfg2;
-	Objwfg2.init(F.size() );
-	//this->Dimension = Objwfg2.getDimension();
-	Objwfg2.evaluate(X, F);
+	int M = F.size();
+	int k=param_k, l=param_l;
+        F = Problems::WFG2( X, k, M );
 }
 void wfg3(std::vector<double> &F, std::vector<double> &X)
 {
-	WFG3 Objwfg3;
-	Objwfg3.init(F.size() );
-	//this->Dimension = Objwfg3.getDimension();
-	Objwfg3.evaluate(X, F);
+	int M = F.size();
+	int k=param_k, l=param_l;
+        F = Problems::WFG3( X, k, M );
 }
 void wfg4(std::vector<double> &F, std::vector<double> &X)
 {
-	WFG4 Objwfg4;
-	Objwfg4.init(F.size() );
-	//this->Dimension = Objwfg4.getDimension();
-	Objwfg4.evaluate(X, F);
+	int M = F.size();
+	int k=param_k, l=param_l;
+        F = Problems::WFG4( X, k, M );
 }
 void wfg5(std::vector<double> &F, std::vector<double> &X)
 {
-	WFG5 Objwfg5;
-	Objwfg5.init(F.size() );
-	//this->Dimension = Objwfg5.getDimension();
-	Objwfg5.evaluate(X, F);
+	int M = F.size();
+	int k=param_k, l=param_l;
+        F = Problems::WFG5( X, k, M );
 }
 void wfg6(std::vector<double> &F, std::vector<double> &X)
 {
-	WFG6 Objwfg6;
-	Objwfg6.init(F.size() );
-	//this->Dimension = Objwfg6.getDimension();
-	Objwfg6.evaluate(X, F);
+	int M = F.size();
+	int k=param_k, l=param_l;
+        F = Problems::WFG6( X, k, M );
 }
 void wfg7(std::vector<double> &F, std::vector<double> &X)
 {
-	WFG7 Objwfg7;
-	Objwfg7.init(F.size() );
-	//this->Dimension = Objwfg7.getDimension();
-	Objwfg7.evaluate(X, F);
+	int M = F.size();
+	int k=param_k, l=param_l;
+        F = Problems::WFG7( X, k, M );
 }
 void wfg8(std::vector<double> &F, std::vector<double> &X)
 {
-	WFG8 Objwfg8;
-	Objwfg8.init(F.size() );
-	//this->Dimension = Objwfg8.getDimension();
-	Objwfg8.evaluate(X, F);
+	int M = F.size();
+	int k=param_k, l=param_l;
+        F = Problems::WFG8( X, k, M );
 }
 void wfg9(std::vector<double> &F, std::vector<double> &X)
 {
-	WFG9 Objwfg9;
-	Objwfg9.init(F.size() );
-	//this->Dimension = Objwfg9.getDimension();
-	Objwfg9.evaluate(X, F);
+	int M = F.size();
+	int k=param_k, l=param_l;
+        F = Problems::WFG9( X, k, M );
 }
 void dtlz1(std::vector<double> &F, std::vector<double> &X)
 {
