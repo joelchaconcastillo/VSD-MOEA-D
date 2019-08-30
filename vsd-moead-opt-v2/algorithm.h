@@ -28,6 +28,7 @@ public:
 //	double get_distance_near_point( vector<CIndividual> &SetA, CIndividual &ind);
 	double get_distance_near_point( vector<int> &SetA, int index,  vector<CIndividual> &candidates);
 	void replacement_phase();
+	void replacement_phase_v2();
 
 	void evol_population();                                      // DE-based recombination
 	void mate_selection(vector<int> &list, int cid, int size, int type);  // select mating parents
@@ -49,6 +50,13 @@ public:
 	vector <CSubproblem> population;
 	vector<CIndividual> child_pop, best;	// memory solutions
 	vector<int> indexSeeds;
+        struct sortbysec
+        {
+	    inline bool operator() (const pair<double, pair<int, CIndividual> > &a, const pair<double, pair<int, CIndividual> > &b) 
+	    { 
+	        return (a.first < b.first); 
+	    } 
+        };
 
 	vector <double>      utility;
 	void operator=(const CMOEAD &moea);
@@ -141,6 +149,87 @@ int CMOEAD::max_near_point(vector<int> &reference, vector<CIndividual> &candidat
    return index;
 }
 
+void CMOEAD::replacement_phase_v2()
+{
+  vector< pair<double, pair<int, CIndividual > > > candidates, penalized, survivors;
+  for(int i = 0; i < pops; i++)
+  {
+     for(int j = 0; j < pops; j++)
+     {
+	candidates.push_back(make_pair(fitnessfunction( population[j].indiv.y_obj , population[i].namda), make_pair(i, population[j].indiv)));
+	candidates.push_back(make_pair(fitnessfunction( best[j].y_obj , population[i].namda), make_pair(i, best[j])));
+	candidates.push_back(make_pair(fitnessfunction( child_pop[j].y_obj , population[i].namda), make_pair(i, child_pop[j])));
+     }
+  }
+  sort(candidates.begin(), candidates.end(), sortbysec());
+cout << candidates.size() << endl;
+for(int i= 0; i < candidates.size(); i++)
+    cout << candidates[i].first << endl;
+cout << "-------"<<endl;
+
+  vector<bool> checked(pops, false), penalized_ca(candidates.size(), false);
+  int index = -1;
+  int ii = -1;
+  int wcont = 0;
+ 
+  while( ++ii < candidates.size() && wcont < pops)
+  {
+    index = candidates[ii].second.first; 
+    if( checked[index] || penalized_ca[ii] ) continue;
+
+    for(int j = 0; j < candidates.size(); j++)
+    {
+	if( checked[candidates[j].second.first] || penalized_ca[j]) continue; //it helps avoiding recompute the distances...
+	if( distance(candidates[ii].second.second.y_obj, candidates[j].second.second.y_obj) < D )	
+ 	{
+	   penalized.push_back(candidates[j]); 
+	   penalized_ca[j] = true;
+	}
+    }
+    population[index].indiv = candidates[ii].second.second;
+    survivors.push_back(candidates[ii]);
+    checked[index] = true;
+    wcont++;
+  }
+  ///getting back the farthest individuals...
+ vector<double> min_dist(penalized.size(), INFINITY);
+ for(int i = 0; i < penalized.size(); i++)
+ {
+    for(int j = 0; j < survivors.size(); j++)
+    {
+	min_dist[i] = min(min_dist[i], distance(penalized[i].second.second.y_obj, survivors[j].second.second.y_obj));
+    }
+ }
+ vector<bool> checked_penalized(penalized.size(), false);
+ while(wcont < pops)
+ {
+   double maxdist = -INFINITY; 
+   int index = -1;
+   int windex = -1;
+   for(int i = 0; i < min_dist.size(); i++)
+   {
+        windex = penalized[i].second.first;
+	if(checked_penalized[i] || checked[windex]) continue;
+	if( maxdist < min_dist[i])
+	{
+	   maxdist = min_dist[i];
+	   index = i;
+	}
+   }
+   checked_penalized[index] = true;
+   windex = penalized[index].second.first;
+   population[windex].indiv = penalized[index].second.second;
+   checked[windex] = true;
+   wcont++;
+   //updates max distances...
+   for(int i = 0; i < min_dist.size(); i++)
+   {
+       if(checked_penalized[i]) continue;
+       min_dist[i] = min(min_dist[i], distance(penalized[index].second.second.y_obj, penalized[i].second.second.y_obj));
+   }
+ }
+
+}
 //Se implementa una fase de reemplazo con el mismo procedimiento que la especiacion
 //en el caso mono-objetivo para funciones multimodales
 void CMOEAD::replacement_phase()
@@ -602,6 +691,7 @@ void CMOEAD::evol_population()
 	//	update_problem(child2, c_sub, type);
 	//	nfes++;
 	}
+		//replacement_phase_v2();
 		replacement_phase();
 
 }
@@ -625,11 +715,20 @@ void CMOEAD::exec_emo(int run)
 	sprintf(filename2,"%s/POF/POF_MOEAD_%s_RUN%d_seed_%d_nobj_%d_niche_%d.dat_bounded",strpath, strTestInstance,run, seed, nobj, niche);
 	//for(int gen=1; gen<=max_gen; gen++)
 //	for(nfes=1; nfes<=max_nfes
+        int current = nfes;
+	int accumulator = 0, bef = nfes;
 	while(nfes<max_nfes)
 	{
-		//curren_gen = gen;	
 		update_parameterD();
 		evol_population();
+		accumulator += nfes - bef ;
+                if(accumulator > 0.01*(max_gen)  )
+		{
+	           accumulator -= 0.01*(max_gen);
+		   save_pos(filename1);
+		   save_front(filename2);
+		}
+		bef=nfes;
 	        nfes += pops;
 	}
 		save_pos(filename1);

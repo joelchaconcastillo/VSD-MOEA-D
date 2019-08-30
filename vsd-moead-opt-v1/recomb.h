@@ -383,7 +383,7 @@ void diff_evo_xoverB(CIndividual &ind0, CIndividual &ind1, CIndividual &ind2, CI
 	  if(child.x_var[n]>vuppBound[n]){ 
 	          double rnd = rnd_uni(&rnd_uni_init);
 	          //double rnd =-0.1+1.2*rnd_uni(&rnd_uni_init);
- 	        //child.x_var[n] = vlowBound[n] + rnd*(vuppBound[n] - vlowBound[n]);
+ 	       // child.x_var[n] = vlowBound[n] + rnd*(vuppBound[n] - vlowBound[n]);
 	        child.x_var[n] = vuppBound[n] - rnd*(vuppBound[n] - ind0.x_var[n]);
 	  }
 	  if(child.x_var[n]<vlowBound[n]) child.x_var[n] = vlowBound[n];

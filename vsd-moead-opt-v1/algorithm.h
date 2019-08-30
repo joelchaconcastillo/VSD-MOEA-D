@@ -577,7 +577,7 @@ void CMOEAD::evol_population()
 
 		// produce a child solution
 		CIndividual child1, child2;
-		double rate2 = 0.5; //rate + 0.25*(rnd_uni(&rnd_uni_init) - 0.5);
+		double rate2 = box_muller(0.5,0.1);// 0.5; //rate + 0.25*(rnd_uni(&rnd_uni_init) - 0.5);
 		//double rate2 = rate + 0.25*(rnd_uni(&rnd_uni_init) - 0.5);
 		diff_evo_xoverB(population[c_sub].indiv,population[plist[0]].indiv,population[plist[1]].indiv, child1, rate2);
 
@@ -625,11 +625,20 @@ void CMOEAD::exec_emo(int run)
 	sprintf(filename2,"%s/POF/POF_MOEAD_%s_RUN%d_seed_%d_nobj_%d_niche_%d.dat_bounded",strpath, strTestInstance,run, seed, nobj, niche);
 	//for(int gen=1; gen<=max_gen; gen++)
 //	for(nfes=1; nfes<=max_nfes
+        int current = nfes;
+	int accumulator = 0, bef = nfes;
 	while(nfes<max_nfes)
 	{
-		//curren_gen = gen;	
 		update_parameterD();
 		evol_population();
+		accumulator += nfes - bef ;
+                if(accumulator > 0.01*(max_gen)  )
+		{
+	           accumulator -= 0.01*(max_gen);
+		   save_pos(filename1);
+		   save_front(filename2);
+		}
+		bef=nfes;
 	        nfes += pops;
 	}
 		save_pos(filename1);
