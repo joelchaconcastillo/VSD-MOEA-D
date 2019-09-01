@@ -13,15 +13,16 @@ chomp $Path;
 my $PathAlgorithm = $Path;
 
 my @Instance = ("DTLZ1", "DTLZ2", "DTLZ3", "DTLZ4", "DTLZ5", "DTLZ6", "DTLZ7");
-my $Di = 0.25;
+my $Di = 0.4;
 my $prob = 0.9;
-my $neighboursize = 10;
+my $neighboursize = 100;
 my $pops=100;
 my $max_nfes=250000*$pops;
 
-for(my $t=1; $t<=10; $t++)
-{
-   $neighboursize=$t*10;
+#for(my $t=1; $t<=10; $t++)
+#{
+#$neighboursize=$t*10;
+   $neighboursize = 100;
    foreach(@Instance)
    {
    	my $nvar;
@@ -48,13 +49,13 @@ for(my $t=1; $t<=10; $t++)
    	   }
    	}
    }
-}	
+   #}	
 
 
 @Instance = ("WFG1", "WFG2", "WFG3", "WFG4", "WFG5", "WFG6", "WFG7", "WFG8", "WFG9");
-for(my $t=1; $t<=10; $t++)
-{
-   $neighboursize=$t*10;
+#for(my $t=1; $t<=10; $t++)
+#{
+#  $neighboursize=$t*10;
    foreach(@Instance)
    {
    	my $nvar;
@@ -71,13 +72,13 @@ for(my $t=1; $t<=10; $t++)
    	   }
    	}
    }
-}
+   #}
 
 @Instance = ("UF1", "UF2", "UF3", "UF4", "UF5", "UF6", "UF7");
 my $nobj=2;
-for(my $t=1; $t<=10; $t++)
-{
-   $neighboursize=$t*10;
+#for(my $t=1; $t<=10; $t++)
+#{
+#$neighboursize=$t*10;
    foreach(@Instance)
    {
    	   my $nvar=30;
@@ -86,13 +87,13 @@ for(my $t=1; $t<=10; $t++)
    	   	print $fout "~$PathAlgorithm/Ejecutable $PathAlgorithm $_ $Sed $nobj $pops $max_nfes  $neighboursize $prob $nvar $Di\n";
    	   }
    }
-}
+   #}
 
 @Instance = ("UF8", "UF9", "UF10");
 $nobj=3;
-for(my $t=1; $t<=10; $t++)
-{
-   $neighboursize=$t*10;
+#for(my $t=1; $t<=10; $t++)
+#{
+#  $neighboursize=$t*10;
    foreach(@Instance)
    {
    	   my $nvar=30;
@@ -102,4 +103,4 @@ for(my $t=1; $t<=10; $t++)
    	   	print $fout "~$PathAlgorithm/Ejecutable $PathAlgorithm $_ $Sed $nobj $pops $max_nfes $neighboursize $prob $nvar $Di\n";
    	   }
    }
-}
+   #}
