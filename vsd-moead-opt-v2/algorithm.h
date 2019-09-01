@@ -38,9 +38,6 @@ public:
 	void save_front(char savefilename[4024]);       // save the pareto front into files
 	void save_pos(char savefilename[4024]);
 
-	void tour_selection(int depth, vector<int> &selected);
-	void comp_utility();
-
 	void update_parameterD();
 
 	double DCN(CIndividual &ind, int &index);
@@ -269,7 +266,6 @@ void CMOEAD::init_population()
 
 	char filename[1024];
 	// Read weight vectors from a data file
-//	sprintf(filename,"/home/joel.chacon/Current/MyResearchTopics/MOEA-D-Diversity/MOEAD-DE/vsd-moead-opt/ParameterSetting/Weight/W%dD_%d.dat", nobj, pops);
 	sprintf(filename,"%s/ParameterSetting/Weight/W%dD_%d.dat", strpath, nobj, pops);
 	std::ifstream readf(filename);
 
@@ -334,50 +330,6 @@ void CMOEAD::init_neighbourhood()
 	dist.clear();
 	indx.clear();
 }
-
-void CMOEAD::tour_selection(int depth, vector<int> &selected)
-{
-	// selection based on utility
-	vector<int> candidate;
-	for(int k=0;    k<nobj; k++)    selected.push_back(k);   // select first m weights
-	for(int n=nobj; n<pops; n++)    candidate.push_back(n);  // set of unselected weights
-
-	while(selected.size()<int(pops/5.0))
-	{
-	    int best_idd = int(rnd_uni(&rnd_uni_init)*candidate.size()), i2;
-		int best_sub = candidate[best_idd], s2;
-		for(int i=1; i<depth; i++)
-		{
-		    i2  = int(rnd_uni(&rnd_uni_init)*candidate.size());
-			s2  = candidate[i2];
-			if(utility[s2]>utility[best_sub])
-			{
-				best_idd = i2;
-			    best_sub = s2;
-			}
-		}
-		selected.push_back(best_sub);
-		candidate.erase(candidate.begin()+best_idd);
-	}
-}
-
-void CMOEAD::comp_utility()
-{
-	double f1, f2, uti, delta;
-    for(int n=0; n<pops; n++)
-	{
-		f1 = fitnessfunction(population[n].indiv.y_obj, population[n].namda);
-		f2 = fitnessfunction(population[n].saved.y_obj, population[n].namda);
-		delta = f2 - f1;
-        if(delta>0.001)  utility[n] = 1.0;
-		else{
-            uti        = 0.95*(1.0+delta/0.001)*utility[n];
-			utility[n] = uti<1.0?uti:1.0;
-		}
-        population[n].saved = population[n].indiv;
-	}
-}
-
 void CMOEAD::update_problem(CIndividual &indiv, int &id)
 {
     vector<int> perm;
@@ -469,7 +421,7 @@ void CMOEAD::evol_population()
 		   x1 = int(pops*rnd_uni(&rnd_uni_init));
 		}
 		int x2 = int(pops*rnd_uni(&rnd_uni_init));
-		while(x1 == x2 && x2 == c_sub )
+		while(x1 == x2 || x2 == c_sub )
 		{
 		   x2 = int(pops*rnd_uni(&rnd_uni_init));
 		}
