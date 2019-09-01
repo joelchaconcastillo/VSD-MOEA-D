@@ -84,6 +84,7 @@ void CMOEAD::update_parameterD()
 
         D = Di - Di * ( 2.0*TElapsed / TEnd  );
   	//this->D = DI - (DF - DI )* ( 2*TElapsed / TEnd  );
+//	D = Di*sin(  5*M_PI*max(0.01, ( 2.0*TElapsed / TEnd  ) ));
 	D = ( -1 > D)? -1: D ;
 }
 double CMOEAD::distance( vector<double> &a, vector<double> &b)
@@ -580,6 +581,35 @@ void CMOEAD::evol_population()
 		double rate2 = box_muller(0.5,0.1);// 0.5; //rate + 0.25*(rnd_uni(&rnd_uni_init) - 0.5);
 		//double rate2 = rate + 0.25*(rnd_uni(&rnd_uni_init) - 0.5);
 		diff_evo_xoverB(population[c_sub].indiv,population[plist[0]].indiv,population[plist[1]].indiv, child1, rate2);
+		//if(  rnd_uni(&rnd_uni_init)  < 0.3)
+	//	if(  sub == 0 )
+	//	{
+	//   	    //improvement...
+	//   	   	int block = int(rnd_uni(&rnd_uni_init)*nvar);
+	//   	   	int index = int(rnd_uni(&rnd_uni_init)*nvar);
+	//   	   	for(int i = 0; i < 100; i++)
+	//   	   	{
+	//   	   	 CIndividual current = child1;
+	//   	    	  for(int j = 0; j < block; j++)
+	//   	   	  {
+	//   	   		int ii = (j+index)%nvar;
+	//			if( rnd_uni(&rnd_uni_init) < 0.5 )
+	//   	   		current.x_var[ii] = child1.x_var[ii] + (i)*(vuppBound[ii] - child1.x_var[ii])/100;
+	//			else
+	//   	   		current.x_var[ii] = child1.x_var[ii] - (i)*(child1.x_var[ii] - vlowBound[ii])/100;
+
+	//   	   	  } 
+	//   	   	  current.obj_eval();
+	//   	   
+	//   	   	double f1 = fitnessfunction(best[c_sub].y_obj, population[c_sub].namda);
+	//   	   	double f2 = fitnessfunction(current.y_obj, population[c_sub].namda);
+	//   	   	if(f2<f1)
+	//   	   		best[c_sub] = current;
+	//   	   	  nfes++;
+	//   	   	}
+	//	}
+
+		//diff_evo_xover2B(population[c_sub].indiv,population[plist[0]].indiv,population[plist[1]].indiv, child1, rate2, best[c_sub]);
 
 		//real_sbx_xoverA(population[plist[0]].indiv, population[plist[1]].indiv, child1, child2);
 		plist.clear();
@@ -632,9 +662,9 @@ void CMOEAD::exec_emo(int run)
 		update_parameterD();
 		evol_population();
 		accumulator += nfes - bef ;
-                if(accumulator > 0.01*(max_gen)  )
+                if(accumulator > 0.01*(max_nfes)  )
 		{
-	           accumulator -= 0.01*(max_gen);
+	           accumulator -= 0.01*(max_nfes);
 		   save_pos(filename1);
 		   save_front(filename2);
 		}
@@ -667,7 +697,7 @@ int trash;
 	readf>>limit;
 	readf>>prob;
 	readf>>rate;
-	niche=10;
+	niche=pops;
 //	printf("\n Parameter Setting in MOEA/D \n");
 //	printf("\n pop %d, gen %d, niche %d, limit %d, prob %f, rate %f\n\n", pops, max_gen, niche, limit, prob, rate);
 
