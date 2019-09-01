@@ -29,8 +29,6 @@ public:
 	void replacement_phase();
 
 	void evol_population();                                      // DE-based recombination
-	void mate_selection(vector<int> &list, int cid, int size, int type);  // select mating parents
-	
 
 	// execute MOEAD
 	void exec_emo(int run);
@@ -332,20 +330,14 @@ void CMOEAD::init_neighbourhood()
 }
 void CMOEAD::update_problem(CIndividual &indiv, int &id)
 {
-    vector<int> perm;
-    for(int i=0; i< pops; i++)perm.push_back(i);
-     random_shuffle(perm.begin(), perm.end());
-//       child_pop[id] = indiv;
-
-
     for(int i=0; i< pops; i++)
 	{
 		double f1, f2;
-		f1 = fitnessfunction(best[perm[i]].y_obj, population[perm[i]].namda);
-		f2 = fitnessfunction(indiv.y_obj, population[perm[i]].namda);
+		f1 = fitnessfunction(best[i].y_obj, population[i].namda);
+		f2 = fitnessfunction(indiv.y_obj, population[i].namda);
 		if(f2<f1)
 		{
-			best[perm[i]] = indiv;
+			best[i] = indiv;
 		}
 	}
 
@@ -362,36 +354,6 @@ void CMOEAD::update_reference(CIndividual &ind)
 		}
 	}
 }
-
-void CMOEAD::mate_selection(vector<int> &list, int cid, int size, int type){
-	// list : the set of the indexes of selected mating parents
-	// cid  : the id of current subproblem
-	// size : the number of selected mating parents
-	// type : 1 - neighborhood; otherwise - whole population
-	int ss   = population[cid].table.size(), id, parent;
-    while(list.size()<size)
-	{
-		if(type==1){
-		    id      = int(ss*rnd_uni(&rnd_uni_init));
-			parent  = population[cid].table[id];
-		}
-		else
-			parent  = int(population.size()*rnd_uni(&rnd_uni_init));
-
-		// avoid the repeated selection
-		bool flag = true;
-		for(int i=0; i<list.size(); i++)
-		{
-			if(list[i]==parent) // parent is in the list
-			{
-				flag = false;
-				break;
-			}
-		}
-
-		if(flag) list.push_back(parent);
-	}
-}
 void CMOEAD::evol_population()
 {
 
@@ -400,18 +362,17 @@ void CMOEAD::evol_population()
 	//for(int i=0; i<pops; i++)  order[i] = i;
 
 	///vector<int> order;	this->tour_selection(10, order);
-	vector<int> order;
-	for(int i = 0; i < pops; i++) order.push_back(i);
-	random_shuffle(order.begin(), order.end());
+//	vector<int> order;
+//	for(int i = 0; i < pops; i++) order.push_back(i);
+//	random_shuffle(order.begin(), order.end());
 	
 
-    for(int sub=0; sub<order.size(); sub++)
+    for(int sub=0; sub<pops; sub++)
 	{
 
-		int c_sub = order[sub];    // random order
+		int c_sub = sub;// order[sub];    // random order
 		//  printf("%d ", c_sub);
 
-		int type;
 		double rnd = rnd_uni(&rnd_uni_init);
 		
 		// select the indexes of mating parents
