@@ -51,10 +51,7 @@ public:
 
 	// algorithm parameters
 	int		max_gen, curren_gen;       //  the maximal number of generations and current gen
-//	int     pops;          //  the population size
-    //int	    niche;         //  the neighborhood size
 	int     limit;         //  the maximal number of solutions replaced
-	//double  prob;          //  the neighboring selection probability
 	double  rate;          //  the differential rate between solutions
 
 	int     nfes;          //  the number of function evluations
@@ -357,21 +354,10 @@ void CMOEAD::update_reference(CIndividual &ind)
 void CMOEAD::evol_population()
 {
 
-	// random order of subproblems at each generation
-	//vector<int> order(vector<int>(pops,0));
-	//for(int i=0; i<pops; i++)  order[i] = i;
-
-	///vector<int> order;	this->tour_selection(10, order);
-//	vector<int> order;
-//	for(int i = 0; i < pops; i++) order.push_back(i);
-//	random_shuffle(order.begin(), order.end());
-	
-
     for(int sub=0; sub<pops; sub++)
 	{
 
 		int c_sub = sub;// order[sub];    // random order
-		//  printf("%d ", c_sub);
 
 		double rnd = rnd_uni(&rnd_uni_init);
 		
@@ -426,12 +412,8 @@ void CMOEAD::exec_emo(int run)
 	nfes      = 0;
 	init_population();
         init_neighbourhood();
-//	sprintf(filename1,"/home/joel.chacon/Current/MyResearchTopics/MOEA-D-Diversity/MOEAD-DE/vsd-moead-opt/POS/POS_MOEAD_%s_RUN%d_seed_%d_nobj_%d.dat_bounded",strTestInstance,run, seed, nobj);
 	sprintf(filename1,"%s/POS/POS_MOEAD_%s_RUN%d_seed_%d_nobj_%d_niche_%d.dat_bounded",strpath, strTestInstance,run, seed, nobj, niche);
-	//sprintf(filename2,"/home/joel.chacon/Current/MyResearchTopics/MOEA-D-Diversity/MOEAD-DE/vsd-moead-opt/POF/POF_MOEAD_%s_RUN%d_seed_%d_nobj_%d.dat_bounded",strTestInstance,run, seed, nobj);
 	sprintf(filename2,"%s/POF/POF_MOEAD_%s_RUN%d_seed_%d_nobj_%d_niche_%d.dat_bounded",strpath, strTestInstance,run, seed, nobj, niche);
-	//for(int gen=1; gen<=max_gen; gen++)
-//	for(nfes=1; nfes<=max_nfes
         int current = nfes;
 	int accumulator = 0, bef = nfes;
 	while(nfes<max_nfes)
