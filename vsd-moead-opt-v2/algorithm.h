@@ -15,13 +15,11 @@ public:
 	CMOEAD();
 	virtual ~CMOEAD();
 
-	void init_neighbourhood();               // calculate the neighbourhood of each subproblem
 	void init_population();                  // initialize the population
 
 
 	void update_reference(CIndividual &ind);                 // update ideal point which is used in Tchebycheff or NBI method
 	void update_problem(CIndividual &ind, int &id); // update current solutions in the neighbourhood
-	void update_memory();
 	int max_near_point(vector<int> &reference, vector<CIndividual> &candidates, vector<int> &penalized, vector<bool> &active);
 //	int max_near_point(vector< CIndividual> &reference, vector<CIndividual> &candidates, vector<int> &penalized, vector<bool> &active);
 //	double get_distance_near_point( vector<CIndividual> &SetA, CIndividual &ind);
@@ -38,7 +36,6 @@ public:
 
 	void update_parameterD();
 
-	double DCN(CIndividual &ind, int &index);
 	double distance( vector<double> &a, vector<double> &b);
 	vector <CSubproblem> population;
 	vector<CIndividual> child_pop, best;	// memory solutions
@@ -88,16 +85,6 @@ double CMOEAD::distance( vector<double> &a, vector<double> &b)
 	}
    return sqrt(dist);
 }
-double CMOEAD::DCN(CIndividual &ind, int &index)
-{
-	double min_dist = 10000000;
-   for(int i = 0; i < pops; i++)
-	if(i == index) continue;
-	else
-	min_dist  = min(min_dist, distance(population[i].indiv.x_var, ind.x_var));
-   return min_dist;
-}
-
 double CMOEAD::get_distance_near_point( vector<int> &SetA, int index,  vector<CIndividual> &candidates)
 {
 
@@ -298,33 +285,6 @@ void CMOEAD::operator=(const CMOEAD &alg)
 {
 	//population = alg.population;
 }
-
-void CMOEAD::init_neighbourhood()
-{
-    vector<double> dist   = vector<double>(pops, 0);
-	vector<int>    indx   = vector<int>(pops, 0);
-
-	for(int i=0; i<pops; i++)
-	{
-		// calculate the distances based on weight vectors
-		for(int j=0; j<pops; j++)
-		{
-		    dist[j]    = dist_vector(population[i].namda,population[j].namda);
-			indx[j]  = j;
-		}
-
-		// find 'niche' nearest neighboring subproblems
-		minfastsort(dist,indx,population.size(),niche);
-
-		// save the indexes of the nearest 'niche' neighboring weight vectors
-		for(int k=0; k<niche; k++)
-		{
-			population[i].table.push_back(indx[k]);
-		}
-	}
-	dist.clear();
-	indx.clear();
-}
 void CMOEAD::update_problem(CIndividual &indiv, int &id)
 {
     for(int i=0; i< pops; i++)
@@ -411,7 +371,6 @@ void CMOEAD::exec_emo(int run)
 	// initialization
 	nfes      = 0;
 	init_population();
-        init_neighbourhood();
 	sprintf(filename1,"%s/POS/POS_MOEAD_%s_RUN%d_seed_%d_nobj_%d_niche_%d.dat_bounded",strpath, strTestInstance,run, seed, nobj, niche);
 	sprintf(filename2,"%s/POF/POF_MOEAD_%s_RUN%d_seed_%d_nobj_%d_niche_%d.dat_bounded",strpath, strTestInstance,run, seed, nobj, niche);
         int current = nfes;
