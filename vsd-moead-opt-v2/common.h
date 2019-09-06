@@ -45,6 +45,22 @@ bool   dominate(vector<double> &u, vector<double> &v, double epsilon)
 
 double fitnessfunction(vector <double> &y_obj, vector <double> &namda)
 {
+ // Chebycheff Scalarizing Function
+        double max_fun = -1.0e+30;
+
+        for(int n=0; n<nobj; n++)
+        {
+                double diff = fabs(y_obj[n] - idealpoint[n]);
+                double feval;
+                if(namda[n]==0)
+                        feval = 0.0001*diff;
+                else
+                        feval = diff*namda[n];
+                if(feval>max_fun) max_fun = feval;
+
+        }
+
+        return max_fun;
 
 
 //modified tchebycheff..
@@ -89,18 +105,18 @@ double fitnessfunction(vector <double> &y_obj, vector <double> &namda)
 
 
 
-  double fmax = -INFINITY, s=0.0;
-   
-  for(int i = 0; i < nobj; i++)
-  {
-    double diff = fabs(y_obj[i]-idealpoint[i] );
-    //double w = max(0.0001, namda[i]);
-    double w = (namda[i]) ? namda[i]: 1e-10;
-    double t = diff/w;
-		s += diff;
-	if(t > fmax) fmax = t;
-  }
-   return fmax + 0.0001*s;
+//  double fmax = -INFINITY, s=0.0;
+//   
+//  for(int i = 0; i < nobj; i++)
+//  {
+//    double diff = fabs(y_obj[i]-idealpoint[i] );
+//    //double w = max(0.0001, namda[i]);
+//    double w = (namda[i]) ? namda[i]: 1e-10;
+//    double t = diff/w;
+//		s += diff;
+//	if(t > fmax) fmax = t;
+//  }
+//   return fmax + 0.0001*s;
 
 //   double norm = 0, d1 = 0, d2 = 0;
 //  int i;
@@ -123,24 +139,24 @@ double fitnessfunction(vector <double> &y_obj, vector <double> &namda)
 
 //////////////////////////////
 	
-    // Chebycheff Scalarizing Function
-	double max_fun = -1.0e+30;
-
-	for(int n=0; n<nobj; n++)
-	{
-		//double diff = fabs(y_obj[n] - idealpoint[n] + 0.1);
-		double diff = (y_obj[n] - idealpoint[n]);
-		double feval;
-		if(namda[n]==0) 
-			feval = 0.0001*diff;
-			//feval = 1e-80*diff;
-		else
-			feval = diff*namda[n];
-		if(feval>max_fun) max_fun = feval;
-
-	}
-
-	return max_fun;
+//    // Chebycheff Scalarizing Function
+//	double max_fun = -1.0e+30;
+//
+//	for(int n=0; n<nobj; n++)
+//	{
+//		//double diff = fabs(y_obj[n] - idealpoint[n] + 0.1);
+//		double diff = (y_obj[n] - idealpoint[n]);
+//		double feval;
+//		if(namda[n]==0) 
+//			feval = 0.0001*diff;
+//			//feval = 1e-80*diff;
+//		else
+//			feval = diff*namda[n];
+//		if(feval>max_fun) max_fun = feval;
+//
+//	}
+//
+//	return max_fun;
 }
 
 void load_data(char filename[1024], vector< vector<double> > &data, int dim)

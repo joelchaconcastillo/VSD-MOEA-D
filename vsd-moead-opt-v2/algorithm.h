@@ -373,6 +373,8 @@ void CMOEAD::exec_emo(int run)
 	init_population();
 	sprintf(filename1,"%s/POS/POS_MOEAD_%s_RUN%d_seed_%d_nobj_%d_niche_%d.dat_bounded",strpath, strTestInstance,run, seed, nobj, niche);
 	sprintf(filename2,"%s/POF/POF_MOEAD_%s_RUN%d_seed_%d_nobj_%d_niche_%d.dat_bounded",strpath, strTestInstance,run, seed, nobj, niche);
+	save_pos(filename1);
+ 	save_front(filename2);
         int current = nfes;
 	int accumulator = 0, bef = nfes;
 	while(nfes<max_nfes)
